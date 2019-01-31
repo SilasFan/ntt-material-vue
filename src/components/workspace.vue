@@ -2,6 +2,9 @@
     <div class="worksp" v-bind:style="{ height: workspHeight }">
         <img src="/deco.png" class="deco">
         <img src="/icon.png" class="icon">
+        <div class="views">
+            <router-view/>
+        </div>
     </div>
 </template>
 
@@ -27,16 +30,23 @@ export default {
 .deco {
     height: 50%;
     right: 0px;
-    top: 0px;
-    z-index: 1;
-    position: absolute;
+    top: 96.2px;
+    z-index: -1;
+    position: fixed;
 }
 
 .icon {
     height: 50%;
-    position: absolute;
+    position: fixed;
     left: 0px;
     bottom: 0px;
     opacity: 0.4;
+    z-index: -1;
+}
+
+.views {
+    position: absolute;
+    top: 10%;
+    left: 10%;
 }
 </style>
