@@ -1,15 +1,32 @@
 <template>
     <div class="home">
-        <p>这里是华南理工大学学生会物资管理系统</p>
-        <p>欢迎，{{userID}}</p>
+        <nav_bar1/>
+        <nav_bar2/>
+        <router-view/>
+        <bottom_bar/>
     </div>
 </template>
 
 <script>
+import nav_bar1 from "../components/nav_bar1.vue";
+import nav_bar2 from "../components/nav_bar2.vue";
+import bottom_bar from "../components/bottom_bar.vue";
+import workspace from "../components/workspace.vue";
+
 export default {
     name: "home",
-    computed: {
-        userID: () => "dalao"
+    components: {
+        nav_bar1,
+        nav_bar2,
+        bottom_bar,
+        workspace
     }
 };
 </script>
+
+<style>
+.home {
+    height: 100%;
+    width: 100%;
+}
+</style>

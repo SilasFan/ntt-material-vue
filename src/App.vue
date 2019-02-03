@@ -1,26 +1,12 @@
 <template>
     <div id="app">
-        <nav_bar1/>
-        <nav_bar2/>
-        <workspace/>
-        <bottom_bar/>
+        <router-view/>
     </div>
 </template>
 
 <script>
-import nav_bar1 from "./components/nav_bar1.vue";
-import nav_bar2 from "./components/nav_bar2.vue";
-import bottom_bar from "./components/bottom_bar.vue";
-import workspace from "./components/workspace.vue";
-
 export default {
-    name: "app",
-    components: {
-        nav_bar1,
-        nav_bar2,
-        bottom_bar,
-        workspace
-    }
+    name: "app"
 };
 </script>
 

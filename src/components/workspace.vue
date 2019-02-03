@@ -1,5 +1,5 @@
 <template>
-    <div class="worksp" v-bind:style="{ height: workspHeight }">
+    <div class="worksp">
         <img src="/deco.png" class="deco">
         <img src="/icon.png" class="icon">
         <div class="views">
@@ -9,11 +9,12 @@
 </template>
 
 <script>
+import Borrow from "./workpages/borrow.vue";
+
 export default {
     name: "workspace",
-    computed: {
-        workspHeight: () => document.body.clientHeight - 127.4 + "px",
-        bdHeight: () => document.body.clientHeight
+    components: {
+        Borrow
     }
 };
 </script>
@@ -22,16 +23,20 @@ export default {
 .worksp {
     width: 100%;
     float: left;
-    position: relative;
     overflow-x: hidden;
     overflow-y: auto;
+    height: calc(100% - 127.4px);
+    height: -moz-calc(100% - 127.4px);
+    height: -webkit-calc(100% - 127.4px);
+    position: relative;
+    background-color: #eef9e1;
 }
 
 .deco {
     height: 50%;
     right: 0px;
     top: 96.2px;
-    z-index: -1;
+    z-index: 0;
     position: fixed;
 }
 
@@ -41,12 +46,12 @@ export default {
     left: 0px;
     bottom: 0px;
     opacity: 0.4;
-    z-index: -1;
+    z-index: 0;
 }
 
 .views {
     position: absolute;
-    top: 10%;
+    top: 3%;
     left: 10%;
 }
 </style>
