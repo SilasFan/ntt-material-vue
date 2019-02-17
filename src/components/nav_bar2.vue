@@ -12,7 +12,7 @@ import Vue from 'vue';
 
         <ul class="menu">
             <li>
-                <a href="url_borrow">物资借出</a>
+                <router-link to="/borrow">物资借出</router-link>
             </li>
             <li>
                 <a href="url_back">物资归还</a>
@@ -85,7 +85,6 @@ export default {
 }
 .menu a {
     font-size: 20px;
-    color: green;
     text-decoration: none;
     padding: 22px;
     display: flex;
@@ -99,5 +98,13 @@ export default {
     color: white;
     background-color: #339941;
     opacity: 0.8;
+}
+.router-link-active {
+    color: white;
+    background-color: #339941;
+    opacity: 0.8;
+}
+.menu a:not(.router-link-active) {
+    color: green;
 }
 </style>

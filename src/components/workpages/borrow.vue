@@ -2,7 +2,7 @@
     <div class="borrow">
         <h1>物资借出</h1>
         <br>
-        <span>·申请单位</span>
+        <span>· 申请单位</span>
         <div class="select-father">
             <select v-model="selected">
                 <option disabled value>请选择</option>
@@ -15,13 +15,13 @@
         <br>
         <br>
         <br>
-        <span>·负责人</span>
+        <span>· 负责人</span>
         <input v-model="re_person" placeholder="请填写负责人" style="margin-left:72px">
         <br>
         <br>
         <br>
         <br>
-        <span>·借用物资</span>
+        <span>· 借用物资</span>
     </div>
 </template>
 
