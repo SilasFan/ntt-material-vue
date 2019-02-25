@@ -22,6 +22,19 @@
         <br>
         <br>
         <span>· 借用物资</span>
+        <input v-model="curr_id" placeholder="请填写id">
+        <button type="button">添 加</button>
+        <br>
+        <br>
+        <table width="1000">
+            <tr v-for="obj in pre_borrow" :key="obj.name">
+                <td>{{obj.id}}</td>
+                <td>{{obj.name}}</td>
+                <td>{{obj.count}}</td>
+                <td>{{obj.description}}</td>
+            </tr>
+        </table>
+        <button type="button" class="confirm">确认提交</button>
     </div>
 </template>
 
@@ -32,7 +45,22 @@ export default {
         return {
             selected: "",
             unit: "",
-            re_person: ""
+            re_person: "",
+            curr_id: "",
+            pre_borrow: [
+                {
+                    name: "桌子",
+                    description: "一张平凡的桌子",
+                    id: "12596",
+                    count: 1
+                },
+                {
+                    name: "手机",
+                    description: "这台是iphone 1169",
+                    id: "12599",
+                    count: 233
+                }
+            ]
         };
     }
 };
@@ -81,6 +109,16 @@ select {
     position: relative;
 }
 
+.confirm {
+    position: fixed;
+    right: 4%;
+    bottom: 60px;
+    height: 60px;
+    width: 100px;
+    font-size: 20px;
+    border-radius: 8px;
+}
+
 input {
     text-align: center;
     margin-left: 50px;
@@ -91,5 +129,29 @@ input {
     color: #208146;
     background-color: #ffffff;
     float: left;
+}
+
+button {
+    height: 30.8px;
+    font-size: 18px;
+    color: white;
+    background-color: #208146;
+    border: #208146 2px solid;
+    border-radius: 4px;
+    cursor: pointer;
+    float: left;
+}
+
+table {
+    margin-left: 50px;
+    margin-top: 10px;
+    text-align: center;
+    border: none;
+    color: #208146;
+    font-size: 17px;
+}
+
+td {
+    padding-bottom: 10px;
 }
 </style>

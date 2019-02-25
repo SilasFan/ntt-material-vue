@@ -9,7 +9,7 @@
                 <a class="borderA" href="url_record">我的记录</a>
             </li>
             <li style="margin-right:10px">
-                <a href="url_quit">退出</a>
+                <router-link to="/login">退出</router-link>
             </li>
         </ul>
     </div>

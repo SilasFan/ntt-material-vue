@@ -4,6 +4,7 @@ import Home from "./views/Home.vue";
 import Login from "./components/login.vue";
 import worksp from "./components/workspace.vue";
 import Borrow from "./components/workpages/borrow.vue";
+import Return from "./components/workpages/return.vue";
 
 Vue.use(Router);
 
@@ -15,14 +16,19 @@ export default new Router({
 			component: Home,
 			children: [
 				{
-					path: "/",
+					path: "main",
 					name: "worksp",
 					component: worksp,
 					children: [
 						{
-							path: "/borrow",
+							path: "borrow",
 							name: "borrow",
 							component: Borrow
+						},
+						{
+							path: "return",
+							name: "return",
+							component: Return
 						}
 					]
 				}

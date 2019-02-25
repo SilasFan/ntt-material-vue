@@ -12,10 +12,10 @@ import Vue from 'vue';
 
         <ul class="menu">
             <li>
-                <router-link to="/borrow">物资借出</router-link>
+                <router-link to="/home/main/borrow">物资借出</router-link>
             </li>
             <li>
-                <a href="url_back">物资归还</a>
+                <router-link to="/home/main/return">物资归还</router-link>
             </li>
             <li>
                 <a href="url_recordQuery">记录查询</a>
