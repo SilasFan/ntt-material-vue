@@ -11,12 +11,20 @@
                 <th>Count</th>
                 <th>Desciption</th>
             </tr>
-            <tr v-for="item in items" :key="item.name" class="items" @click="trClick();">
-                <th>{{item.id}}</th>
-                <th>{{item.name}}</th>
-                <th>{{item.count}}</th>
-                <th>{{item.description}}</th>
-            </tr>
+            <template v-for="item in items">
+                <tr :key="item.id" v-on:click="item.dis = !item.dis" class="items">
+                    <th>{{item.id}}</th>
+                    <th>{{item.name}}</th>
+                    <th>{{item.count}}</th>
+                    <th>{{item.description}}</th>
+                </tr>
+                <transition name="fade" :key="item.id">
+                    <tr :key="item.id" v-if="!item.dis" class="content">
+                        <p>{{item.id}}</p>
+                        <p>{{item.name}}</p>
+                    </tr>
+                </transition>
+            </template>
         </table>
     </div>
 </template>
@@ -32,13 +40,15 @@ export default {
                     name: "桌子",
                     description: "一张平凡的桌子",
                     id: "12596",
-                    count: 1
+                    count: 1,
+                    dis: true
                 },
                 {
                     name: "手机",
                     description: "这台是iphone 1169",
                     id: "12599",
-                    count: 233
+                    count: 233,
+                    dis: true
                 }
             ]
         };
@@ -91,6 +101,10 @@ export default {
     background-color: rgb(236, 235, 235);
 }
 
+.content {
+    transition: all 5s ease-in-out 5s;
+}
+
 th {
     border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
     line-height: 40px;
@@ -103,5 +117,14 @@ th {
 table {
     width: 100%;
     background-color: white;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>
