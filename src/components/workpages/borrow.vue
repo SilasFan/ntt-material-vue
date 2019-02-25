@@ -3,27 +3,23 @@
         <h1>物资借出</h1>
         <br>
         <span>· 申请单位</span>
-        <div class="select-father">
-            <select v-model="selected">
-                <option disabled value>请选择</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-            </select>
-            <input v-model="unit" placeholder="请填写单位">
-        </div>
+        <input v-model="unit" placeholder="请填写单位" style="width:30%" required>
         <br>
         <br>
         <br>
         <span>· 负责人</span>
-        <input v-model="re_person" placeholder="请填写负责人" style="margin-left:72px">
+        <input v-model="re_person.name" placeholder="请填写负责人" style="margin-left:72px" required>
+        <input v-model="re_person.phone" placeholder="手机号" required>
+        <input v-model="re_person.student_number" placeholder="学号（选填）">
         <br>
         <br>
         <br>
         <br>
         <span>· 借用物资</span>
-        <input v-model="curr_id" placeholder="请填写id">
-        <button type="button">添 加</button>
+        <input v-model="curr_item.id" placeholder="请填写id" required>
+        <input v-model="curr_item.count" placeholder="请填写数量" type="number" required>
+        <input placeholder="备注" v-model="curr_item.description" type="text">
+        <button type="button" style="margin-left:3px;">添 加</button>
         <br>
         <br>
         <table width="1000">
@@ -45,8 +41,11 @@ export default {
         return {
             selected: "",
             unit: "",
-            re_person: "",
-            curr_id: "",
+            re_person: {
+                name: "",
+                phone: "",
+                student_number: ""
+            },
             pre_borrow: [
                 {
                     name: "桌子",
@@ -60,7 +59,12 @@ export default {
                     id: "12599",
                     count: 233
                 }
-            ]
+            ],
+            curr_item: {
+                id: "",
+                count: undefined,
+                description: ""
+            }
         };
     }
 };
@@ -85,30 +89,6 @@ export default {
     font-size: 22px;
 }
 
-select {
-    border: none;
-    outline: none;
-    height: 28.8px;
-    line-height: 28px;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    font-size: 18px;
-    color: #208146;
-    width: 230px;
-    text-align: center;
-    background: url("/icon2.svg") no-repeat right;
-    background-color: #ffffff;
-    float: left;
-}
-
-.select-father {
-    float: left;
-    color: #208146;
-    margin-left: 50px;
-    position: relative;
-}
-
 .confirm {
     position: fixed;
     right: 4%;
@@ -131,6 +111,15 @@ input {
     float: left;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 button {
     height: 30.8px;
     font-size: 18px;
@@ -144,7 +133,7 @@ button {
 
 table {
     margin-left: 50px;
-    margin-top: 10px;
+    margin-top: 30px;
     text-align: center;
     border: none;
     color: #208146;

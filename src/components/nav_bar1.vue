@@ -92,6 +92,10 @@ export default {
     color: white;
     float: left;
     width: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .time_dis {
     float: left;

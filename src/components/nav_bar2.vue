@@ -18,10 +18,7 @@ import Vue from 'vue';
                 <router-link to="/home/main/return">物资归还</router-link>
             </li>
             <li>
-                <a href="url_recordQuery">记录查询</a>
-            </li>
-            <li>
-                <a href="store_query">存量查询</a>
+                <router-link to="/home/main/requery">记录查询</router-link>
             </li>
             <li>
                 <a href="url_ddlRemind">逾期提醒</a>
@@ -44,6 +41,12 @@ export default {
     float: left;
     width: 100%;
     box-shadow: 0px 10px 5px #888888;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+    z-index: 7;
 }
 
 .nav_bar2 img {

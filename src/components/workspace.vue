@@ -9,13 +9,8 @@
 </template>
 
 <script>
-import Borrow from "./workpages/borrow.vue";
-
 export default {
-    name: "workspace",
-    components: {
-        Borrow
-    }
+    name: "workspace"
 };
 </script>
 
@@ -30,6 +25,13 @@ export default {
     height: -webkit-calc(100% - 127.4px);
     position: relative;
     background-color: #eef9e1;
+}
+
+img {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .deco {
@@ -53,5 +55,6 @@ export default {
     position: absolute;
     top: 3%;
     left: 10%;
+    width: 80%;
 }
 </style>

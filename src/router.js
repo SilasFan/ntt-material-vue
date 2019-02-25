@@ -5,6 +5,7 @@ import Login from "./components/login.vue";
 import worksp from "./components/workspace.vue";
 import Borrow from "./components/workpages/borrow.vue";
 import Return from "./components/workpages/return.vue";
+import Requery from "./components/workpages/requery.vue";
 
 Vue.use(Router);
 
@@ -29,6 +30,11 @@ export default new Router({
 							path: "return",
 							name: "return",
 							component: Return
+						},
+						{
+							path: "requery",
+							name: "requery",
+							component: Requery
 						}
 					]
 				}
