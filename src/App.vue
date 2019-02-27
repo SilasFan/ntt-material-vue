@@ -5,8 +5,22 @@
 </template>
 
 <script>
+import Vue from "vue";
+import Router from "vue-router";
+Vue.use(Router);
+
 export default {
-    name: "app"
+    name: "app",
+    data() {
+        return {
+            login: false
+        };
+    },
+    mounted() {
+        if (!this.login) {
+            this.$router.push({ name: "login" });
+        }
+    }
 };
 </script>
 

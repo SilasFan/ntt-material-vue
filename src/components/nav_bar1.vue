@@ -1,14 +1,10 @@
-//目前还没做的：User名的同步（用prop）
-
 <template>
     <div class="nav-bar_1">
         <p class="time_dis">{{timeNow}}</p>
         <ul>
             <li>{{day_section}}好,&ensp;{{user}}</li>
-            <li>
-                <a class="borderA" href="url_record">我的记录</a>
-            </li>
-            <li style="margin-right:10px">
+
+            <li class="borderA" style="margin-right:10px">
                 <router-link to="/login">退出</router-link>
             </li>
         </ul>
@@ -48,14 +44,10 @@ export default {
                 weekday[today.getDay()]
             );
         },
-        user: function() {
-            return "dalao";
-            //getUser_currentLogined
-        },
         day_section: function() {
             var today = this.TN;
-            if (today.getHours() >= 6 && today.getHours() <= 12) return "早上";
-            else if (today.getHours() > 12 && today.getHours() < 15)
+            if (today.getHours() >= 6 && today.getHours() <= 11) return "早上";
+            else if (today.getHours() > 11 && today.getHours() < 15)
                 return "中午";
             else if (today.getHours() >= 15 && today.getHours() < 19)
                 return "下午";
@@ -68,6 +60,9 @@ export default {
         return {
             TN: new Date()
         };
+    },
+    props: {
+        user: String
     },
     mounted: function() {
         let _this = this;
@@ -127,7 +122,7 @@ export default {
 .borderA {
     padding: 0 15px;
     margin: 0 15px;
-    border: 2px solid;
+    border-left: 2px solid;
     border-top: none;
     border-bottom: none;
     border-color: white;

@@ -1,6 +1,3 @@
-//目前还没做的：1.各个a标签的onclick跳转；2.长时间active的元素修改（在onclick上绑定）（用JS直接数组绑定修改class a_active）
-import Vue from 'vue';
-
 <template>
     <div class="nav_bar2">
         <div class="left_area">
@@ -12,16 +9,22 @@ import Vue from 'vue';
 
         <ul class="menu">
             <li>
-                <router-link to="/home/main/borrow">物资借出</router-link>
+                <router-link to="/home/borrow">物资借出</router-link>
             </li>
             <li>
-                <router-link to="/home/main/return">物资归还</router-link>
+                <router-link to="/home/return">物资归还</router-link>
             </li>
             <li>
-                <router-link to="/home/main/requery">记录查询</router-link>
+                <router-link to="/home/query">
+                    记录查询
+                    <span>5</span>
+                </router-link>
             </li>
             <li>
-                <a href="url_ddlRemind">逾期提醒</a>
+                <router-link to="/home/repository">物品管理</router-link>
+            </li>
+            <li>
+                <router-link to="/home/usermanage" v-if="admin">用户管理</router-link>
             </li>
         </ul>
     </div>
@@ -29,7 +32,10 @@ import Vue from 'vue';
 
 <script>
 export default {
-    name: "nav_bar2"
+    name: "nav_bar2",
+    props: {
+        admin: Boolean
+    }
 };
 </script>
 
@@ -109,5 +115,18 @@ export default {
 }
 .menu a:not(.router-link-active) {
     color: green;
+}
+
+.nav_bar2 span {
+    font-size: 14px;
+    color: white;
+    background-color: red;
+    height: 17px;
+    width: 17px;
+    border-radius: 12px;
+    position: relative;
+    top: -5px;
+    left: 4px;
+    display: inline-block;
 }
 </style>

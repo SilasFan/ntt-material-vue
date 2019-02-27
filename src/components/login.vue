@@ -14,12 +14,16 @@
                     <p v-if="errorDisplay">{{errorData}}</p>
                 </form>
             </div>
-            <button type="button" value="23333" onclick="alert('hello');"></button>
+            <button type="button" value="23333" v-on:click="userLogin"></button>
         </div>
     </div>
 </template>
 
 <script>
+import Vue from "vue";
+import Router from "vue-router";
+Vue.use(Router);
+
 export default {
     name: "login",
     data() {
@@ -29,6 +33,18 @@ export default {
             errorData: "error",
             errorDisplay: false
         };
+    },
+    methods: {
+        userLogin() {
+            if (this.pswd === "1") {
+                this.$router.push({
+                    name: "borrow",
+                    params: { login: true, user: this.userID }
+                });
+            } else {
+                this.errorDisplay = true;
+            }
+        }
     }
 };
 </script>
@@ -55,6 +71,10 @@ h1 {
     top: 0px;
     z-index: 0;
     position: fixed;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .deco_2 {
@@ -63,6 +83,10 @@ h1 {
     bottom: 0px;
     z-index: 0;
     position: fixed;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .log {
