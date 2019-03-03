@@ -11,10 +11,10 @@
                     <br>密 码
                     <input type="password" v-model="pswd" style="margin-left:20px;">
                     <br>
-                    <p v-if="errorDisplay">{{errorData}}</p>
+                    <p v-if="errorDisplay">出错啦！</p>
                 </form>
             </div>
-            <button type="button" value="23333" v-on:click="userLogin"></button>
+            <button type="button" value="23333" v-on:click="login"></button>
         </div>
     </div>
 </template>
@@ -22,6 +22,7 @@
 <script>
 import Vue from "vue";
 import Router from "vue-router";
+import { json } from "body-parser";
 Vue.use(Router);
 
 export default {
@@ -30,13 +31,13 @@ export default {
         return {
             userID: "",
             pswd: "",
-            errorData: "error",
+            isLogin: false,
             errorDisplay: false
         };
     },
     methods: {
         userLogin() {
-            if (this.pswd === "1") {
+            if (this.isLogin) {
                 this.$router.push({
                     name: "borrow",
                     params: { login: true, user: this.userID }
@@ -44,6 +45,31 @@ export default {
             } else {
                 this.errorDisplay = true;
             }
+        },
+        login() {
+            let str = {
+                query: `query{
+					login(id:"${this.userID}",passwd:"${this.pswd}")
+				}`,
+                variables: null
+            };
+            let result = false;
+
+            //用fetch请求
+            fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                body: JSON.stringify(str)
+            })
+                .then(res =>
+                    res
+                        .json()
+                        .then(data => {
+                            this.isLogin = data.data.login;
+                        })
+                        .catch(e => (this.isLogin = false))
+                )
+                .then(() => this.userLogin())
+                .catch(e => (this.isLogin = false));
         }
     }
 };
