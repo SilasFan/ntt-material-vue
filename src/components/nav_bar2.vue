@@ -17,7 +17,7 @@
             <li>
                 <router-link to="/home/query">
                     记录查询
-                    <span>5</span>
+                    <span v-if="toReturn">{{toReturn}}</span>
                 </router-link>
             </li>
             <li>
@@ -35,6 +35,43 @@ export default {
     name: "nav_bar2",
     props: {
         admin: Boolean
+    },
+    data() {
+        return {
+            toReturn: 0
+        };
+    },
+    methods: {
+        toReturnCount() {
+            let str = {
+                query: `query{
+					toReturn
+				}`,
+                variables: null
+            };
+
+            fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                body: JSON.stringify(str)
+            }).then(res =>
+                res.json().then(data => {
+                    if (data.data !== null) {
+                        this.toReturn = data.data.toReturn;
+                    }
+                })
+            );
+        }
+    },
+    mounted: function() {
+        let _this = this;
+        this.timer = setInterval(function() {
+            _this.toReturnCount();
+        }, 1000);
+    },
+    beforeDestroy: function() {
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
     }
 };
 </script>

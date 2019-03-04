@@ -19,21 +19,21 @@
                     <h3>修改用户</h3>
                     <br>
                     <span style="margin-left:10%">用户名</span>
-                    <input type="text" v-model="re_add.name" placeholder="User Name...">
+                    <input type="text" v-model="re_add.id" placeholder="User ID...">
                     <span style="width:10%;">&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;</span>
                     <span>密码</span>
                     <input type="text" v-model="re_add.passwd" placeholder="Password...">
                     <br>
                     <br>
                     <br>
-                    <button>添加</button>
-                    <button>修改</button>
-                    <button style="background-color:#ff5252">删除</button>
+                    <button v-on:click="addUser">添加</button>
+                    <button v-on:click="modifyUser">修改</button>
+                    <button style="background-color:#ff5252" v-on:click="deleteUser">删除</button>
                 </div>
             </transition>
             <template v-for="user in users">
-                <tr :key="user.name" class="items">
-                    <td>{{user.name}}</td>
+                <tr :key="user.id" class="items">
+                    <td>{{user.id}}</td>
                     <td>{{user.passwd}}</td>
                 </tr>
             </template>
@@ -50,19 +50,10 @@ export default {
     data() {
         return {
             searchKey: "",
-            users_raw: [
-                {
-                    name: "dalao",
-                    passwd: "12596"
-                },
-                {
-                    name: "dalao2",
-                    passwd: "12599"
-                }
-            ],
+            users_raw: [],
             users: [],
             re_add: {
-                name: "",
+                id: "",
                 passwd: ""
             },
             add_user: true
@@ -74,12 +65,116 @@ export default {
                 this.searchKey === ""
                     ? this.users_raw
                     : this.users_raw.filter(
-                          user => user.name.indexOf(this.searchKey) >= 0
+                          user => user.id.indexOf(this.searchKey) >= 0
                       );
+        },
+        reload() {
+            let str = {
+                query: `query{
+					allUser{
+						id,
+						passwd
+					}
+				}`,
+                variables: null
+            };
+
+            fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                body: JSON.stringify(str)
+            }).then(res =>
+                res.json().then(data => {
+                    if (data.data === null) {
+                        window.console.log("some errors occur");
+                        return;
+                    } else {
+                        this.users_raw = data.data.allUser;
+                        this.users = this.users_raw;
+                    }
+                })
+            );
+        },
+        addUser() {
+            let str = {
+                query: `mutation{
+					addUser(user:{
+						id: "${this.re_add.id}",
+						passwd: "${this.re_add.passwd}"
+					})
+				}`,
+                variables: null
+            };
+
+            fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                body: JSON.stringify(str)
+            }).then(res =>
+                res.json().then(data => {
+                    if (data.data == null) {
+                        alert("网络错误！");
+                    } else if (!data.data.addUser) {
+                        alert("用户已存在！");
+                    } else {
+                        alert("添加成功！");
+                        this.reload();
+                    }
+                })
+            );
+        },
+        modifyUser() {
+            let str = {
+                query: `mutation{
+					updateUser(user:{
+						id: "${this.re_add.id}",
+						passwd: "${this.re_add.passwd}"
+					})
+				}`,
+                variables: null
+            };
+
+            fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                body: JSON.stringify(str)
+            }).then(res =>
+                res.json().then(data => {
+                    if (data.data == null) {
+                        alert("网络错误！");
+                    } else if (!data.data.updateUser) {
+                        alert("用户不存在！");
+                    } else {
+                        alert("修改成功！");
+                        this.reload();
+                    }
+                })
+            );
+        },
+        deleteUser() {
+            let str = {
+                query: `mutation{
+					deleteUser(user:"${this.re_add.id}")
+				}`,
+                variables: null
+            };
+
+            fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                body: JSON.stringify(str)
+            }).then(res =>
+                res.json().then(data => {
+                    if (data.data == null) {
+                        alert("网络错误！");
+                    } else if (!data.data.deleteUser) {
+                        alert("用户不存在！");
+                    } else {
+                        alert("删除成功！");
+                        this.reload();
+                    }
+                })
+            );
         }
     },
     beforeMount() {
-        this.users = this.users_raw;
+        this.reload();
     }
 };
 </script>
@@ -90,6 +185,7 @@ export default {
     overflow: hidden;
     box-shadow: 0px 5px 5px #888888;
     margin-top: 15px;
+    margin-bottom: 35px;
 }
 .edit {
     position: fixed;

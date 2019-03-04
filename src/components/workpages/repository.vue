@@ -14,8 +14,8 @@
                 <th>ID</th>
                 <th>名称</th>
                 <th>数量</th>
-                <th>剩余</th>
-                <th>损坏记录</th>
+                <th>已借出</th>
+                <th>损坏记录（最新）</th>
             </tr>
             <transition name="fade" v-if="item_modify">
                 <div class="item_modify">
@@ -30,15 +30,15 @@
                     <br>
                     <br>
                     <span style="margin-left:10%;">数量</span>
-                    <input type="number" v-model="re_modify.count" placeholder="Amount...">
+                    <input type="number" v-model="re_modify.amount">
                     <span style="width:10%;">&ensp;&ensp;&ensp;&ensp;&ensp;</span>
-                    <span>剩余</span>
-                    <input type="number" v-model="re_modify.remain" placeholder="Remain...">
+                    <span>已借出</span>
+                    <input type="number" v-model="re_modify.borrow">
                     <br>
                     <br>
-                    <button>添加</button>
-                    <button>修改</button>
-                    <button style="background-color:#ff5252">删除</button>
+                    <button v-on:click="addItem">添加</button>
+                    <button v-on:click="updateItem">修改</button>
+                    <button style="background-color:#ff5252" v-on:click="deleteItem">删除</button>
                     <h5 style="color:orange;margin-top:5px;">（删除时只填ID即可，添加时不需要填ID）</h5>
                 </div>
             </transition>
@@ -46,9 +46,9 @@
                 <tr :key="item.id" class="items">
                     <td>{{item.id}}</td>
                     <td>{{item.name}}</td>
-                    <td>{{item.count}}</td>
-                    <td>{{item.remain}}</td>
-                    <td>{{item.description}}</td>
+                    <td>{{item.amount}}</td>
+                    <td>{{item.borrow}}</td>
+                    <td>{{item.brokenDes.length?item.brokenDes[item.brokenDes.length-1]:""}}</td>
                 </tr>
             </template>
         </table>
@@ -64,29 +64,14 @@ export default {
     data() {
         return {
             searchKey: "",
-            item_modify: true,
+            item_modify: false,
             re_modify: {
                 id: "",
                 name: "",
-                count: Number(0),
-                remain: Number(0)
+                amount: Number(0),
+                borrow: Number(0)
             },
-            items_raw: [
-                {
-                    name: "桌子",
-                    description: "一张平凡的桌子",
-                    id: "12596",
-                    count: 1,
-                    remain: 1
-                },
-                {
-                    name: "手机",
-                    description: "这台是iphone 1169 \n 2333",
-                    id: "12599",
-                    count: 233,
-                    remain: 77
-                }
-            ],
+            items_raw: [],
             items: []
         };
     },
@@ -98,10 +83,134 @@ export default {
                     : this.items_raw.filter(
                           item => item.name.indexOf(this.searchKey) >= 0
                       );
+        },
+        addItem() {
+            let query = {
+                query: `mutation{
+					addGood(good:{
+						name:"${this.re_modify.name}",
+						amount: ${this.re_modify.amount}
+					}){
+						id
+					}
+				}`,
+                variables: null
+            };
+
+            if (this.re_modify.amount <= 0) {
+                alert("数量错误");
+                return;
+            }
+
+            fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                body: JSON.stringify(query)
+            }).then(res =>
+                res.json().then(data => {
+                    if (data.data == null) {
+                        alert("操作失败!");
+                    } else {
+                        alert("添加成功，id为" + data.data.addGood.id);
+                        this.reload();
+                    }
+                })
+            );
+        },
+        updateItem() {
+            let str = {
+                query: `mutation{
+					updateGood(good:{
+						id: ${this.re_modify.id},
+						name: "${this.re_modify.name}",
+						amount: ${this.re_modify.amount},
+						borrow: ${this.re_modify.borrow}
+					})
+				}`,
+                variables: null
+            };
+
+            let tmp = this.re_modify;
+            if (
+                tmp.id === "" ||
+                tmp.name === "" ||
+                tmp.amount === 0 ||
+                tmp.borrow === 0
+            ) {
+                alert("格式不合要求!");
+                return;
+            }
+
+            fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                body: JSON.stringify(str)
+            }).then(res =>
+                res.json().then(data => {
+                    if (data.data === null || data.data.updateGood !== true) {
+                        alert("修改失败");
+                    } else {
+                        alert("修改成功！");
+                        this.reload();
+                    }
+                })
+            );
+        },
+        deleteItem() {
+            let str = {
+                query: `mutation{
+					deleteGood(id:${this.re_modify.id})
+				}`,
+                variables: null
+            };
+
+            fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                body: JSON.stringify(str),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            }).then(res =>
+                res.json().then(data => {
+                    if (data.data === null || data.data.deleteGood === false) {
+                        alert("发生错误！");
+                    }
+                    if (data.data.deleteGood === true) {
+                        alert("删除成功！");
+                        this.reload();
+                    }
+                })
+            );
+        },
+        reload() {
+            let str = {
+                query: `query{
+				allGoods{
+					id,
+					name,
+					amount,
+					borrow,
+					brokenDes
+				}
+			}`,
+                variables: null
+            };
+
+            fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                body: JSON.stringify(str)
+            }).then(res =>
+                res.json().then(data => {
+                    if (data.data == null) {
+                        alert("网络错误");
+                        return;
+                    }
+                    this.items_raw = data.data.allGoods;
+                    this.items = this.items_raw;
+                })
+            );
         }
     },
     beforeMount() {
-        this.items = this.items_raw;
+        this.reload();
     }
 };
 </script>
@@ -112,6 +221,7 @@ export default {
     overflow: hidden;
     box-shadow: 0px 5px 5px #888888;
     margin-top: 15px;
+    margin-bottom: 35px;
 }
 
 .header {
